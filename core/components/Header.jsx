@@ -1,7 +1,13 @@
+import PageHeader from "antd/lib/page-header";
+
 const Header = () => {
-    return (
-        <h1 className="text-red-500">Crema Amm Simulater</h1>
-    );
-}
- 
+  return (
+    <PageHeader
+      className="site-page-header bg-white"
+      title="Title"
+      subTitle="This is a subtitle"
+    />
+  );
+};
+
 export default Header;
