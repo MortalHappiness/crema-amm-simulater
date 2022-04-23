@@ -5,43 +5,52 @@ import HandleCard from "../core/components/HandleCard";
 
 import { Decimal } from "decimal.js";
 import {
+  calculateLiquity,
   MAX_PRICE,
   MAX_TICK,
   MIN_PRICE,
   MIN_TICK,
+  price2Tick,
 } from "@cremafinance/crema-sdk";
 import {
   calculateTokenAmountPoints,
   getConstantLiquidityAssetValuePoints,
 } from "../core/crema";
-import { constantLiquidity } from "../core/liquidityFuncs";
 import { linspace } from "../utils/linspace";
 import { N_POINTS } from "../core/constants";
+import { balancer, uniSwapV2 } from "../core/amm";
 
 const currentPrice = new Decimal(2958);
-const minPrice = 1183;
-const maxPrice = 7395;
-// const minPrice = MIN_PRICE.toNumber();
-// const maxPrice = MAX_PRICE.toNumber();
+const minPrice = new Decimal(1183);
+const maxPrice = new Decimal(7395);
 const desiredAmountSrc = new Decimal(16.9243);
-const ticks = linspace(MIN_TICK, MAX_TICK, N_POINTS);
-const liquidities = constantLiquidity(
-  ticks,
+const tickLower = price2Tick(minPrice);
+const tickUpper = price2Tick(maxPrice);
+const { desiredAmountDst } = calculateLiquity(
+  tickLower,
+  tickUpper,
   desiredAmountSrc,
-  currentPrice.sqrt()
+  currentPrice.sqrt(),
+  0
 );
 
-const { X: X2, Y: Y2 } = calculateTokenAmountPoints(
-  ticks,
-  liquidities,
-  currentPrice.sqrt()
+const lower = 10;
+const upper = 1000;
+
+const { X: X1, Y: Y1 } = uniSwapV2(
+  lower,
+  upper,
+  desiredAmountSrc,
+  desiredAmountDst
 );
-// const { X, Y } = getConstantLiquidityAssetValuePoints(
-//   currentPrice,
-//   minPrice,
-//   maxPrice,
-//   desiredAmountSrc
-// );
+
+const { X: X2, Y: Y2 } = balancer(
+  lower,
+  upper,
+  desiredAmountSrc,
+  desiredAmountDst,
+  { wx: 0.25, wy: 0.75 }
+);
 
 const Home: NextPage = () => {
   return (
@@ -51,6 +60,7 @@ const Home: NextPage = () => {
         <HandleCard />
 
         {/* TODO: replace x and y */}
+        {/*
         <Chart
           title={"Asset Value"}
           x={ticks}
@@ -58,17 +68,25 @@ const Home: NextPage = () => {
           xtitle={"Price (Y/X)"}
           ytitle={"Asset Value (Y)"}
         />
+        */}
+        <Chart
+          title={"AMM Curve (uniSwapv2)"}
+          x={X1}
+          y={Y1}
+          xtitle={"X Reserves"}
+          ytitle={"Y Reserves"}
+        />
         <Chart
           title={"Liqudity Distribution"}
-          x={ticks}
-          y={liquidities.map((l) => l.toNumber())}
+          x={X1}
+          y={Y1}
           xtitle={"Tick"}
           ytitle={"Liquidity"}
         />
         <Chart
-          title={"AMM Curve"}
-          x={X2.map((x) => x.toNumber())}
-          y={Y2.map((y) => y.toNumber())}
+          title={"AMM Curve (balancer)"}
+          x={X2}
+          y={Y2}
           xtitle={"X Reserves"}
           ytitle={"Y Reserves"}
         />
