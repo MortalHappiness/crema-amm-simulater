@@ -8,7 +8,9 @@ const usdc = 42613.9;
 const plotRangeLower = 256;
 const plotRangeUpper = 28500;
 
-const tickLower = price2Tick(minPrice);
+console.log(minPrice);
+
+// const tickLower = price2Tick(minPrice);
 // const tickUpper = price2Tick(maxPrice);
 
-console.log(tickLower);
+// console.log(tickLower);
