@@ -49,7 +49,7 @@ const { X: X2, Y: Y2 } = balancer(
   upper,
   desiredAmountSrc,
   desiredAmountDst,
-  { wx: 0.25, wy: 0.75 }
+  { wx: 0.25 }
 );
 
 const Home: NextPage = () => {
@@ -59,36 +59,21 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-2 gap-4 p-4 min-h-100">
         <HandleCard />
 
-        {/* TODO: replace x and y */}
-        {/*
-        <Chart
-          title={"Asset Value"}
-          x={ticks}
-          y={liquidities.map((l) => l.toNumber())}
-          xtitle={"Price (Y/X)"}
-          ytitle={"Asset Value (Y)"}
-        />
-        */}
         <Chart
           title={"AMM Curve (uniSwapv2)"}
           x={X1}
-          y={Y1}
+          ys={[Y1, Y2]}
+          labels={["uniSwapv2", `balancer (wx = ${0.25})`]}
           xtitle={"X Reserves"}
           ytitle={"Y Reserves"}
         />
         <Chart
           title={"Liqudity Distribution"}
           x={X1}
-          y={Y1}
+          ys={[Y1]}
+          labels={["test"]}
           xtitle={"Tick"}
           ytitle={"Liquidity"}
-        />
-        <Chart
-          title={"AMM Curve (balancer)"}
-          x={X2}
-          y={Y2}
-          xtitle={"X Reserves"}
-          ytitle={"Y Reserves"}
         />
       </div>
     </div>

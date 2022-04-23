@@ -23,21 +23,21 @@ ChartJS.register(
 interface IChartSession {
   title?: string;
   x: number[];
-  y: number[];
+  ys: number[][];
+  labels: string[];
   xtitle: string;
   ytitle: string;
 }
 
 /** */
-const ChartSession = ({ title, x, y, xtitle, ytitle }: IChartSession) => {
-  const label_1 = "Moderate Range Strategy";
-  const fiftyStrategy = "50:50 HODL Strategy";
-  const hundredStadge = "100:0 HODL Strategy";
-
-  // TODO: get data
-  const fifData: number[] = [];
-  const hunData: number[] = [];
-
+const ChartSession = ({
+  title,
+  x,
+  ys,
+  labels,
+  xtitle,
+  ytitle,
+}: IChartSession) => {
   const options = {
     scales: {
       x: {
@@ -57,31 +57,20 @@ const ChartSession = ({ title, x, y, xtitle, ytitle }: IChartSession) => {
     },
   };
 
+  const backgroundColors = ["rgba(75,192,192,0.2)"];
+  const borderColors = ["rgba(75,192,192,1)", "#742774", "#1fb6ff"];
+
   const data = {
-    labels: x || [],
-    datasets: [
-      {
-        label: label_1 || "",
-        data: y || [],
+    labels: x,
+    datasets: ys.map((y, idx) => {
+      return {
+        label: labels[idx] || "",
+        data: ys[idx] || [],
         fill: true,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)",
-      },
-      // TODO: 50:50 strategy
-      {
-        label: fiftyStrategy || "",
-        data: fifData || [],
-        fill: true,
-        borderColor: "#742774",
-      },
-      // TODO: 100 strategy
-      {
-        label: hundredStadge || "",
-        data: hunData || [],
-        fill: true,
-        borderColor: "#1fb6ff",
-      },
-    ],
+        backgroundColor: backgroundColors[idx],
+        borderColor: borderColors[idx],
+      };
+    }),
   };
 
   return (

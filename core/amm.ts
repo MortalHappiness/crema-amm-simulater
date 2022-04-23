@@ -4,7 +4,6 @@ import { N_POINTS } from "./constants";
 
 export interface balancerOption {
   wx: number;
-  wy: number;
 }
 
 export function uniSwapV2(
@@ -26,7 +25,8 @@ export function balancer(
   desiredAmountDst: Decimal,
   option: balancerOption
 ) {
-  const { wx, wy } = option;
+  const { wx } = option;
+  const wy = 1 - wx;
   const s = desiredAmountSrc.toPower(wx).mul(desiredAmountDst.toPower(wy));
   const X = linspace(lower, upper, N_POINTS);
   const Y = X.map((x) =>
