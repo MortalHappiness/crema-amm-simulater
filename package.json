@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@cremafinance/crema-sdk": "^1.1.14",
+    "antd": "^4.19.5",
     "decimal.js": "^10.3.1",
     "next": "12.1.5",
     "react": "18.0.0",
