@@ -3,11 +3,19 @@ import Header from "../core/components/Header";
 import Chart from "../core/components/Chart";
 import HandleCard from "../core/components/HandleCard";
 
-import { tick2PriceTest } from "../core/crema";
+import { getCremaCLMMPoints } from "../core/crema";
+const currentPrice = 2958;
+const minPrice = 1183;
+const maxPrice = 7395;
+const desiredAmountSrc = 16.9243;
+const { X, Y } = getCremaCLMMPoints(
+  currentPrice,
+  minPrice,
+  maxPrice,
+  desiredAmountSrc
+);
 
 const Home: NextPage = () => {
-  console.log(tick2PriceTest());
-
   return (
     <div className="min-h-screen">
       <Header title={"CREMA AMM SIMULATER"} subtitle={"HACKATHON 3.0"} />
@@ -15,10 +23,7 @@ const Home: NextPage = () => {
         <HandleCard />
 
         {/* TODO: replace x and y */}
-        <Chart
-          x={[1000, 1500, 2000, 2500, 3000, 3500]}
-          y={[33, 25, 35, 51, 54, 76]}
-        />
+        <Chart x={X} y={Y} />
       </div>
     </div>
   );
