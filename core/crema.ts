@@ -3,11 +3,34 @@ import {
   price2Tick,
   calculateLiquity,
   calculateTokenAmount,
+  MIN_PRICE,
+  MAX_PRICE,
+  tick2SqrtPrice,
 } from "@cremafinance/crema-sdk";
 
 import { linspace } from "../utils/linspace";
+import { N_POINTS } from "./constants";
 
-const N_POINTS = 1000;
+export function calculateTokenAmountPoints(
+  ticks: number[],
+  liquidities: Decimal[],
+  currentSqrtPrice: Decimal
+) {
+  const X: Decimal[] = [];
+  const Y: Decimal[] = [];
+  const price: Decimal[] = ticks.map((x) => tick2SqrtPrice(x));
+  for (let i = 0; i < liquidities.length - 1; ++i) {
+    const { amountA, amountB } = calculateTokenAmount(
+      ticks[i],
+      ticks[i + 1],
+      liquidities[i],
+      tick2SqrtPrice(Math.floor(ticks[i] + ticks[i + 1]) / 2)
+    );
+    X.push(amountA);
+    Y.push(amountB);
+  }
+  return { X, Y };
+}
 
 export function calculateDesiredAmountDst(
   currentPrice: number,
@@ -27,7 +50,7 @@ export function calculateDesiredAmountDst(
   return desiredAmountDst;
 }
 
-export function getCremaCLMMPoints(
+export function getConstantLiquidityAssetValuePoints(
   currentPrice: number,
   minPrice: number,
   maxPrice: number,

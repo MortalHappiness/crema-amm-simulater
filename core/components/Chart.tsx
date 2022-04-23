@@ -21,12 +21,15 @@ ChartJS.register(
 );
 
 interface IChartSession {
+  title?: string;
   x: number[];
   y: number[];
+  xtitle: string;
+  ytitle: string;
 }
 
 /** */
-const ChartSession = ({ x, y }: IChartSession) => {
+const ChartSession = ({ title, x, y, xtitle, ytitle }: IChartSession) => {
   const label_1 = "Moderate Range Strategy";
   const fiftyStrategy = "50:50 HODL Strategy";
   const hundredStadge = "100:0 HODL Strategy";
@@ -34,6 +37,25 @@ const ChartSession = ({ x, y }: IChartSession) => {
   // TODO: get data
   const fifData: number[] = [];
   const hunData: number[] = [];
+
+  const options = {
+    scales: {
+      x: {
+        display: true,
+        title: {
+          display: true,
+          text: xtitle,
+        },
+      },
+      y: {
+        display: true,
+        title: {
+          display: true,
+          text: ytitle,
+        },
+      },
+    },
+  };
 
   const data = {
     labels: x || [],
@@ -64,9 +86,9 @@ const ChartSession = ({ x, y }: IChartSession) => {
 
   return (
     <div className="site-layout-background bg-white p-4 min-h-full">
-      <p className="text-lg">Analysis</p>
+      <p className="text-lg">{title || "Analysis"}</p>
 
-      <Line data={data} />
+      <Line data={data} options={options} />
     </div>
   );
 };
