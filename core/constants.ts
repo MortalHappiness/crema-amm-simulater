@@ -1,1 +1,1 @@
-export const N_POINTS = 100;
+export const N_POINTS = 200;
