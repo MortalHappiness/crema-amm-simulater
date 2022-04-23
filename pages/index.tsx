@@ -13,7 +13,12 @@ const Home: NextPage = () => {
       <Header title={"CREMA AMM SIMULATER"} subtitle={"HACKATHON 3.0"} />
       <div className="grid grid-cols-2 gap-4 p-4 min-h-100">
         <HandleCard />
-        <Chart />
+
+        {/* TODO: replace x and y */}
+        <Chart
+          x={[1000, 1500, 2000, 2500, 3000, 3500]}
+          y={[33, 25, 35, 51, 54, 76]}
+        />
       </div>
     </div>
   );

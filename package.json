@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "@cremafinance/crema-sdk": "^1.1.14",
+    "@types/chart.js": "^2.9.37",
+    "@types/faker": "^6.6.9",
     "antd": "^4.19.5",
+    "chart.js": "^3.7.1",
     "decimal.js": "^10.3.1",
+    "faker": "^6.6.6",
+    "lodash": "^4.17.21",
     "next": "12.1.5",
     "react": "18.0.0",
+    "react-chartjs-2": "^4.1.0",
     "react-dom": "18.0.0"
   },
   "devDependencies": {
