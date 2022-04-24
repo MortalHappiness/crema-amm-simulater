@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@cremafinance/crema-sdk": "^1.1.14",
     "@types/chart.js": "^2.9.37",
     "@types/faker": "^6.6.9",

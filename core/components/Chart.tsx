@@ -74,7 +74,7 @@ const ChartSession = ({
   };
 
   return (
-    <div className="site-layout-background bg-white p-4 min-h-full">
+    <div className=" bg-[linear-gradient(214deg,#3e434e,#23262b)] p-4 min-h-full rounded-xl text-white">
       <p className="text-lg">{title || "Analysis"}</p>
 
       <Line data={data} options={options} />
