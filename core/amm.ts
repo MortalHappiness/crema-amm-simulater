@@ -1,4 +1,6 @@
+import { PoweroffOutlined } from "@ant-design/icons";
 import { Decimal } from "decimal.js";
+import { A } from "./constants";
 
 export interface AMM {
   calculateS(
@@ -59,5 +61,31 @@ export class Balancer implements AMM {
         .toNumber()
     );
     return Y;
+  }
+}
+
+export class CurveFi implements AMM {
+  calculateS(
+    desiredAmountSrc: Decimal,
+    desiredAmountDst: Decimal
+  ): Decimal {
+    return desiredAmountSrc.add(desiredAmountDst);
+  }
+
+  reserves(X: number[], s: Decimal, option: { A: number }): number[] {
+    const D = s.toNumber();
+    const {A} = option;
+    const Y = X.map((x) => {
+      const a = 16 * A * Math.pow(x, 2);
+      const b = 16 * A * Math.pow(x, 2) + 4 * D * x - 16 * A * D * x;
+      const c = - Math.pow(D, 3);
+      const delta = Math.sqrt(b * b - 4 * a * c);
+      return (-b + delta)/(2*a);
+    });
+    return Y;
+  }
+
+  liquidities(X: number[]): number[] {
+    return []
   }
 }

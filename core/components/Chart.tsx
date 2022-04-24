@@ -55,6 +55,7 @@ const ChartSession = ({
         },
       },
     },
+    radius: 0,
   };
 
   const backgroundColors = ["rgba(75,192,192,0.2)"];
