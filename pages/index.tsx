@@ -54,7 +54,7 @@ const { X: X1A, Y: Y1A } = getConcentrateLiquidityAssetValuePoints(currentPrice,
 
 const Home: NextPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-2">
       <Header title={"AMM SIMULATER"} />
       <div className="grid grid-cols-2 gap-4 p-4 min-h-100">
         <HandleCard />
@@ -68,6 +68,7 @@ const Home: NextPage = () => {
           ytitle={"Y Reserves"}
         />
         <Chart
+          type={"bar"}
           title={"Liqudity Distribution"}
           x={X1L}
           ys={[Y1L, Y2L]}

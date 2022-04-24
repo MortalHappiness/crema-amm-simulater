@@ -12,7 +12,6 @@ import {
 import { linspace } from "../utils/linspace";
 import { N_POINTS } from "./constants";
 import { min } from "lodash";
-import { balancerOption } from "./amm";
 
 export function calculateTokenAmountPoints(
   ticks: number[],
@@ -71,7 +70,8 @@ export function getBalancerAssetValuePoints(
   maxPrice: Decimal,
   desiredAmountSrc: Decimal,
   desiredAmountDst: Decimal,
-  option: balancerOption
+  // TODO: fix type
+  option: any
 ) {
   const { wx } = option;
   const wy = 1 - wx;

@@ -7,14 +7,16 @@ import {
   Title,
   Tooltip,
   Legend,
+  BarElement,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -27,6 +29,7 @@ interface IChartSession {
   labels: string[];
   xtitle: string;
   ytitle: string;
+  type?: "bar" | "line";
 }
 
 /** */
@@ -37,6 +40,7 @@ const ChartSession = ({
   labels,
   xtitle,
   ytitle,
+  type = "line",
 }: IChartSession) => {
   const options = {
     scales: {
@@ -78,7 +82,8 @@ const ChartSession = ({
     <div className=" bg-[linear-gradient(214deg,#3e434e,#23262b)] p-4 min-h-full rounded-xl text-white">
       <p className="text-lg">{title || "Analysis"}</p>
 
-      <Line data={data} options={options} />
+      {type === "line" && <Line data={data} options={options} />}
+      {type === "bar" && <Bar data={data} options={options} />}
     </div>
   );
 };
