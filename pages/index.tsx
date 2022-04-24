@@ -44,7 +44,7 @@ const Y2L = balancer.liquidities(X1L, { s: s2, wx });
 const Home: NextPage = () => {
   return (
     <div className="min-h-screen">
-      <Header title={"AMM SIMULATER"} subtitle={"HACKATHON 3.0"} />
+      <Header title={"AMM SIMULATER"} />
       <div className="grid grid-cols-2 gap-4 p-4 min-h-100">
         <HandleCard />
 
