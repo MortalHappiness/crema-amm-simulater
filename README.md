@@ -3,6 +3,15 @@
 ## Description
 This project aims to leverage crema-sdk to simulate static AMM algorithms. We've tried to visualize UniswapV2, Balancer, and Curve Finance AMM curves and their liquidity distribution curve.
 
+## QuickStart
+
+```bash
+yarn
+yarn dev
+```
+
+Go to [http://localhost:3000](http://localhost:3000) in your browser to see the webpage.
+
 ## Liquidity distribution curve derivation steps
 1. Calculate the parameter `s` in the curve equation first. Take Balancer curve for example,
 2. Call the "calculateLiquity" function in crema-sdk, then we get the `desiredAmountSrc` and `desiredAmountDst` pair, which forms a point on the curve.
