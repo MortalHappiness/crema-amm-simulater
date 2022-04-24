@@ -4,22 +4,13 @@ import Chart from "../core/components/Chart";
 import HandleCard from "../core/components/HandleCard";
 
 import { Decimal } from "decimal.js";
-import {
-  calculateLiquity,
-  MAX_PRICE,
-  MAX_TICK,
-  MIN_PRICE,
-  MIN_TICK,
-  price2Tick,
-} from "@cremafinance/crema-sdk";
-import {
-  calculateTokenAmountPoints,
-  getConstantLiquidityAssetValuePoints,
-} from "../core/crema";
+import { calculateLiquity, price2Tick } from "@cremafinance/crema-sdk";
 import { linspace } from "../utils/linspace";
+import { UniSwapV2, Balancer } from "../core/amm";
 import { N_POINTS } from "../core/constants";
-import { balancer, uniSwapV2 } from "../core/amm";
-import { balancerLiquidity, uniSwapV2Liquidity } from "../core/liquidity";
+
+const uniSwapV2 = new UniSwapV2();
+const balancer = new Balancer();
 
 const currentPrice = new Decimal(200);
 const minPrice = new Decimal(1);
@@ -38,21 +29,17 @@ const { desiredAmountDst } = calculateLiquity(
 const lower = 10;
 const upper = 1000;
 
-const {
-  X: X1,
-  Y: Y1,
-  params: params1,
-} = uniSwapV2(lower, upper, desiredAmountSrc, desiredAmountDst);
+const X1 = linspace(lower, upper, N_POINTS);
+const X1L = linspace(tickLower, tickUpper, N_POINTS);
 
-const { X: X1L, Y: Y1L } = uniSwapV2Liquidity(tickLower, tickUpper, params1);
+const s1 = uniSwapV2.calculateS(desiredAmountSrc, desiredAmountDst);
+const Y1 = uniSwapV2.reserves(X1, s1);
+const Y1L = uniSwapV2.liquidities(X1L, { s: s1 });
 
-const {
-  X: X2,
-  Y: Y2,
-  params: params2,
-} = balancer(lower, upper, desiredAmountSrc, desiredAmountDst, { wx: 0.25 });
-
-const { X: X2L, Y: Y2L } = balancerLiquidity(tickLower, tickUpper, params2);
+const wx = 0.25;
+const s2 = balancer.calculateS(desiredAmountSrc, desiredAmountDst, { wx });
+const Y2 = balancer.reserves(X1, s2, { wx });
+const Y2L = balancer.liquidities(X1L, { s: s2, wx });
 
 const Home: NextPage = () => {
   return (
