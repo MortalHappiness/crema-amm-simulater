@@ -1,39 +1,63 @@
 import { Decimal } from "decimal.js";
-import { linspace } from "../utils/linspace";
-import { N_POINTS } from "./constants";
-import { balancerParams, uniSwapV2Params } from "./liquidity";
 
-export interface balancerOption {
-  wx: number;
+export interface AMM {
+  calculateS(
+    desiredAmountSrc: Decimal,
+    desiredAmountDst: Decimal,
+    params?: any
+  ): Decimal;
+  reserves(X: number[], s: Decimal, params?: any): number[];
+  liquidities(X: number[], params?: any): number[];
 }
 
-export function uniSwapV2(
-  lower: number,
-  upper: number,
-  desiredAmountSrc: Decimal,
-  desiredAmountDst: Decimal
-) {
-  const s_2 = desiredAmountSrc.mul(desiredAmountDst);
-  const X = linspace(lower, upper, N_POINTS);
-  const Y = X.map((x) => s_2.div(new Decimal(x)).toNumber());
-  const params: uniSwapV2Params = { s: s_2.sqrt() };
-  return { X, Y, params };
+export class UniSwapV2 implements AMM {
+  calculateS(desiredAmountSrc: Decimal, desiredAmountDst: Decimal): Decimal {
+    return desiredAmountSrc.mul(desiredAmountDst).sqrt();
+  }
+
+  reserves(X: number[], s: Decimal): number[] {
+    const Y = X.map((x) => s.toPower(2).div(new Decimal(x)).toNumber());
+    return Y;
+  }
+
+  liquidities(X: number[], params: { s: Decimal }): number[] {
+    const { s } = params;
+    const Y = X.map((x) => s.toNumber());
+    return Y;
+  }
 }
 
-export function balancer(
-  lower: number,
-  upper: number,
-  desiredAmountSrc: Decimal,
-  desiredAmountDst: Decimal,
-  option: balancerOption
-) {
-  const { wx } = option;
-  const wy = 1 - wx;
-  const s = desiredAmountSrc.toPower(wx).mul(desiredAmountDst.toPower(wy));
-  const X = linspace(lower, upper, N_POINTS);
-  const Y = X.map((x) =>
-    s.div(Decimal.pow(x, wx)).toPower(Decimal.div(1, wy)).toNumber()
-  );
-  const params: balancerParams = { wx, s };
-  return { X, Y, params };
+export class Balancer implements AMM {
+  calculateS(
+    desiredAmountSrc: Decimal,
+    desiredAmountDst: Decimal,
+    params: { wx: number }
+  ): Decimal {
+    const { wx } = params;
+    const wy = 1 - wx;
+    return desiredAmountSrc.toPower(wx).mul(desiredAmountDst.toPower(wy));
+  }
+
+  reserves(X: number[], s: Decimal, params: { wx: number }): number[] {
+    const { wx } = params;
+    const wy = 1 - wx;
+    const Y = X.map((x) =>
+      s.div(Decimal.pow(x, wx)).toPower(Decimal.div(1, wy)).toNumber()
+    );
+    return Y;
+  }
+
+  liquidities(X: number[], params: { wx: number; s: Decimal }): number[] {
+    const { s, wx } = params;
+    const wy = 1 - wx;
+    const Y = X.map((x) =>
+      s
+        .mul(2)
+        .mul(Decimal.pow(wx, wy))
+        .mul(Decimal.pow(wy, wx))
+        .mul(Decimal.exp((wx - 0.5) * x))
+        .toNumber()
+    );
+    return Y;
+  }
 }
