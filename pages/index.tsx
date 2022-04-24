@@ -8,7 +8,10 @@ import { calculateLiquity, price2Tick } from "@cremafinance/crema-sdk";
 import { linspace } from "../utils/linspace";
 import { UniSwapV2, Balancer } from "../core/amm";
 import { N_POINTS } from "../core/constants";
-import { getConcentrateLiquidityAssetValuePoints, getUniswapV1AssetValuePoints } from "../core/crema";
+import {
+  getConcentrateLiquidityAssetValuePoints,
+  getUniswapV1AssetValuePoints,
+} from "../core/crema";
 
 const uniSwapV2 = new UniSwapV2();
 const balancer = new Balancer();
@@ -42,7 +45,12 @@ const s2 = balancer.calculateS(desiredAmountSrc, desiredAmountDst, { wx });
 const Y2 = balancer.reserves(X1, s2, { wx });
 const Y2L = balancer.liquidities(X1L, { s: s2, wx });
 
-const { X: X1A, Y: Y1A } = getConcentrateLiquidityAssetValuePoints(currentPrice, minPrice, maxPrice, desiredAmountSrc);
+const { X: X1A, Y: Y1A } = getConcentrateLiquidityAssetValuePoints(
+  currentPrice,
+  minPrice,
+  maxPrice,
+  desiredAmountSrc
+);
 
 const Home: NextPage = () => {
   return (
@@ -60,6 +68,7 @@ const Home: NextPage = () => {
           ytitle={"Y Reserves"}
         />
         <Chart
+          type={"bar"}
           title={"Liqudity Distribution"}
           x={X1L}
           ys={[Y1L, Y2L]}
