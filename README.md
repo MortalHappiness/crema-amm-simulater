@@ -1,7 +1,11 @@
 # crema-amm-simulater
 
 ## Description
+This project is [the winner](https://twitter.com/EpochsStudio/status/1523702711853907968?s=20&t=pKZUhDmPfXE67_TFyuYwiA) of Hackathon 3.0 in Taiwan. It is built within 30 hours so it's not recommended to use in production. User who intends to use this project should take their own risks. 
+
 This project aims to leverage crema-sdk to simulate static AMM algorithms. We've tried to visualize UniswapV2, Balancer, and Curve Finance AMM curves and their liquidity distribution curve.
+
+Demo can be found [here](https://crema-amm-simulater.vercel.app)
 
 ## QuickStart
 
